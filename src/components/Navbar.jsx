@@ -136,14 +136,6 @@ function Header() {
 							<ListItemText primary='Anasayfa' />
 						</ListItemButton>
 					</ListItem>
-					<ListItem disablePadding>
-						<ListItemButton
-							onClick={() => {
-								navigate("/")
-							}}>
-							<ListItemText primary='Kataloglar' />
-						</ListItemButton>
-					</ListItem>
 				</List>
 				<Divider />
 
