@@ -151,9 +151,17 @@ function Header() {
 					<ListItem disablePadding>
 						<ListItemButton
 							onClick={() => {
-								navigate("/edit-catalog")
+								navigate("/new-catalog")
 							}}>
-							<ListItemText primary='Katalog Oluştur' />
+							<ListItemText primary='Yeni Katalog Oluştur' />
+						</ListItemButton>
+					</ListItem>
+					<ListItem disablePadding>
+						<ListItemButton
+							onClick={() => {
+								navigate("/new-product")
+							}}>
+							<ListItemText primary='Yeni Ürün Oluştur' />
 						</ListItemButton>
 					</ListItem>
 				</List>

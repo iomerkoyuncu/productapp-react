@@ -1,50 +1,40 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 
+import WestIcon from "@mui/icons-material/West"
+import { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { useSelector, useDispatch } from "react-redux"
+import { toast } from "react-toastify"
+import { IconButton } from "@mui/material"
 import FormControl from "@mui/material/FormControl"
 import Input from "@mui/material/Input"
 import InputLabel from "@mui/material/InputLabel"
-import IconButton from "@mui/material/IconButton"
 import InputAdornment from "@mui/material/InputAdornment"
 
-import { toast } from "react-toastify"
+import { createProduct } from "../features/product/productSlice"
 
-import WestIcon from "@mui/icons-material/West"
-import { useNavigate, useParams } from "react-router-dom"
-import { updateProduct, getProductById } from "../features/product/productSlice"
-
-import { useDispatch, useSelector } from "react-redux"
-function EditProduct() {
+function NewProduct() {
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
-	const params = useParams()
 
-	useEffect(() => {
-		dispatch(getProductById(params.id))
-	}, [dispatch, params.id])
-
-	const { product } = useSelector((state) => state.product)
-
-	const { name, description, price, quantity, imgURL, catalogId } =
-		product.value || {}
-
-	const [formdata, setFormdata] = useState({
-		name: name || "",
-		description: description || "",
-		price: price || 0,
-		quantity: quantity || 0,
-		imgURL: imgURL || "",
+	const [formData, setFormData] = useState({
+		name: "",
+		description: "",
+		price: "",
+		quantity: "",
+		imgURL: "",
+		catalogId: "",
 	})
 
 	const handleChange = (e) => {
-		setFormdata({ ...formdata, [e.target.name]: e.target.value })
+		setFormData({ ...formData, [e.target.name]: e.target.value })
 	}
 
 	const handleSubmit = (e) => {
 		e.preventDefault()
 
-		dispatch(updateProduct({ ...formdata, id: params.id }))
-
-		toast.success("Ürün güncellendi!")
+		dispatch(createProduct(formData))
+		toast.success("Ürün başarıyla eklendi")
 		navigate("/")
 	}
 
@@ -66,7 +56,7 @@ function EditProduct() {
 								<WestIcon />
 							</IconButton>
 
-							<h1 className='p-3 text-xl'>Ürünü Düzenle</h1>
+							<h1 className='p-3 text-xl'>Yeni Ürün Ekle</h1>
 						</div>
 					</div>
 					<div className=' max-sm:w-auto max-sm:m-2 max-sm:p-2 m-5 p-5 mx-10'>
@@ -79,7 +69,7 @@ function EditProduct() {
 									id='standard-adornment-amount'
 									name='name'
 									onChange={handleChange}
-									value={formdata.name}
+									value={formData.name}
 								/>
 							</FormControl>
 							<FormControl fullWidth sx={{ m: 1 }} variant='standard'>
@@ -90,7 +80,7 @@ function EditProduct() {
 									id='standard-adornment-amount'
 									name='description'
 									onChange={handleChange}
-									value={formdata.description}
+									value={formData.description}
 								/>
 							</FormControl>
 							<FormControl fullWidth sx={{ m: 1 }} variant='standard'>
@@ -104,7 +94,7 @@ function EditProduct() {
 									}
 									name='price'
 									onChange={handleChange}
-									value={formdata.price}
+									value={formData.price}
 								/>
 							</FormControl>
 							<FormControl fullWidth sx={{ m: 1 }} variant='standard'>
@@ -115,7 +105,7 @@ function EditProduct() {
 									id='standard-adornment-amount'
 									name='quantity'
 									onChange={handleChange}
-									value={formdata.quantity}
+									value={formData.quantity}
 								/>
 							</FormControl>
 							<FormControl fullWidth sx={{ m: 1 }} variant='standard'>
@@ -126,16 +116,18 @@ function EditProduct() {
 									id='standard-adornment-amount'
 									name='imgURL'
 									onChange={handleChange}
-									value={formdata.imgURL}
+									value={formData.imgURL}
 								/>
 							</FormControl>
 							<FormControl fullWidth sx={{ m: 1 }} variant='standard'>
+								<InputLabel htmlFor='standard-adornment-amount'>
+									Katalog ID
+								</InputLabel>
 								<Input
-									disabled
 									id='standard-adornment-amount'
 									name='catalogId'
 									onChange={handleChange}
-									value={catalogId}
+									value={formData.catalogId}
 								/>
 							</FormControl>
 						</div>
@@ -158,4 +150,4 @@ function EditProduct() {
 	)
 }
 
-export default EditProduct
+export default NewProduct

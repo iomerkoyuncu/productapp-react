@@ -1,18 +1,26 @@
 import React, { useContext, useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
 
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams, Link } from "react-router-dom"
+import { useSelector, useDispatch } from "react-redux"
 import WestIcon from "@mui/icons-material/West"
 
 import { toast } from "react-toastify"
+
+import { getProductById } from "../features/product/productSlice"
 
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline"
 import { IconButton } from "@mui/material"
 
 function Product() {
+	const dispatch = useDispatch()
 	const navigate = useNavigate()
-
 	const params = useParams()
+
+	const { product } = useSelector((state) => state.product)
+
+	useEffect(() => {
+		dispatch(getProductById(params.id))
+	}, [dispatch, params.id])
 
 	return (
 		<div className='my-container'>
@@ -30,8 +38,14 @@ function Product() {
 						<WestIcon />
 					</IconButton>
 					<p className='p-2'>
-						Back to previous page | Listed in Category:{" "}
-						<span className='underline '>Products</span>
+						Geri Dön | Bu Kategoride Listeleniyor:{" "}
+						<span
+							className='underline cursor-pointer'
+							onClick={() => {
+								navigate(`/catalog/${product.value?.catalogId}`)
+							}}>
+							{product.value?.catalogId}
+						</span>
 					</p>
 				</div>
 				<div className='flex p-2'>
@@ -39,39 +53,26 @@ function Product() {
 						<img
 							className='w-96 h-96 p-2'
 							src={
-								"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8eUiYLvcDTnmvYGMuMjuuQChlnxEaTP4cKuLVO7BBhROOjlm67_U6mB-go6ghpbdZjIQ&usqp=CAU"
+								product.value?.imgURL ||
+								"https://www.thermaxglobal.com/wp-content/uploads/2020/05/image-not-found.jpg"
 							}
 							alt=''
 						/>
 					</div>
 					<div className='flex flex-col justify-evenly p-2'>
 						<div>
-							<h1 className='text-[24px]'>Başlık</h1>
-							<small>Free 2 days shipping | 1 year warranty</small>
+							<h1 className='text-[24px]'>{product.value?.name}</h1>
+							<small>ID: {product.value?.id}</small>
 						</div>
-						<h1>Description</h1>
+						<h1>{product.value?.description}</h1>
 						<div className='flex'>
 							<h1>$</h1>
-							<h1 className='p-2 text-[36px]'>price</h1>
+							<h1 className='p-2 text-[36px]'>{product.value?.price}</h1>
 						</div>
-						<ul className='p-2'>
-							<li className='flex p-2'>
-								<CheckCircleOutlineIcon />
-								<p className='px-2'>Free Return</p>
-							</li>
-							<li className='flex p-2'>
-								<CheckCircleOutlineIcon />
-								<p className='px-2'>Chat with us 24 hours</p>
-							</li>
-							<li className='flex p-2'>
-								<CheckCircleOutlineIcon />
-								<p className='px-2'>Comes with a package</p>
-							</li>
-							<li className='flex p-2'>
-								<CheckCircleOutlineIcon />
-								<p className='px-2'>Comes with a package</p>
-							</li>
-						</ul>
+						<div className='flex'>
+							<h1 className='p-2'>Quantity:</h1>
+							<h1 className='p-2'>{product.value?.quantity}</h1>
+						</div>
 						<div className='flex p-2'>
 							<button className='p-2 m-2 w-64 bg-blue-500 text-white rounded'>
 								Buy it Now
